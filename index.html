@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tool Finder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>AI Tool Finder</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#tasks-section" class="active">Find Tools</a></li>
+                    <li><a href="#popular-tools">Popular Tools</a></li>
+                    <li><a href="#about-section">About</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Find the Perfect AI Tool for Your Task</h1>
+            <p>Discover and compare AI tools for any task - from image editing to content creation</p>
+            <div class="search-container">
+                <input type="text" placeholder="Search for AI tools...">
+                <button class="btn-primary">Find Tools</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="tasks-section" id="tasks-section">
+        <div class="container">
+            <h2>Popular AI Tasks</h2>
+            <div class="task-grid" id="task-grid">
+                <!-- Task cards will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section" id="results-section">
+        <div class="container">
+            <h2 id="results-title">AI Tools for <span id="selected-task">Task</span></h2>
+            <div class="results-grid" id="results-grid">
+                <!-- Tool results will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-tools-section" id="popular-tools">
+        <div class="container">
+            <h2>Popular AI Tools</h2>
+            <div class="popular-tools-grid">
+                <div class="tool-card">
+                    <h3>ChatGPT</h3>
+                    <p>Advanced AI chatbot capable of natural conversations and assisting with various tasks.</p>
+                    <a href="https://chat.openai.com/" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
+                </div>
+                <div class="tool-card">
+                    <h3>DALL-E</h3>
+                    <p>Create realistic images and art from natural language descriptions.</p>
+                    <a href="https://openai.com/dall-e/" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
+                </div>
+                <div class="tool-card">
+                    <h3>Midjourney</h3>
+                    <p>Generate detailed AI art based on text prompts with stunning quality.</p>
+                    <a href="https://www.midjourney.com/" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
+                </div>
+                <div class="tool-card">
+                    <h3>Claude</h3>
+                    <p>AI assistant that can engage in helpful, harmless, and honest conversations.</p>
+                    <a href="https://claude.ai/" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about-section" id="about-section">
+        <div class="container">
+            <h2>About AI Tool Finder</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>AI Tool Finder helps you discover the right AI tools for your needs. We make it easy to find, explore, and compare AI solutions.</p>
+                    
+                    <p>With so many tools available, it can be hard to choose. That's why we organize and update our directory regularly to guide you quickly to the right tools.</p>
+                    
+                    <h3>Contact Us</h3>
+                    <p>Have a suggestion or feedback? Let us know!</p>
+                    <p><i class="fas fa-envelope"></i> Email: <a href="mailto:contact@aitoolfinder.com">contact@aitoolfinder.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+            <div class="copyright">
+                <p>&copy; 2025 AI Tool Finder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        document.querySelectorAll('.nav a').forEach(navLink => {
+                            navLink.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        const nav = document.querySelector('.nav');
+                        if (window.innerWidth <= 768) {
+                            nav.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>    
+    
