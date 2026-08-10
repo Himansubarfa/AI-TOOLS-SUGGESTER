@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>AI Tool Finder</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
+
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <h1>AI Tool Finder</h1>
-            </div>
+            <div class="logo"><h1>AI Tool Finder</h1></div>
             <nav class="nav">
                 <ul>
                     <li><a href="#tasks-section" class="active">Find Tools</a></li>
@@ -20,19 +19,18 @@
                     <li><a href="#about-section">About</a></li>
                 </ul>
             </nav>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="mobile-menu"><i class="fas fa-bars"></i></div>
         </div>
     </header>
 
     <section class="hero">
         <div class="container">
             <h1>Find the Perfect AI Tool for Your Task</h1>
-            <p>Discover and compare AI tools for any task - from image editing to content creation</p>
+            <p>Discover and compare AI tools – from image editing to content creation</p>
             <div class="search-container">
-                <input type="text" placeholder="Search for AI tools..." id="search-input">
+                <input type="text" placeholder="Search for AI tools..." id="search-input" autocomplete="off" />
                 <button class="btn-primary" id="search-btn">Find Tools</button>
+                <span class="search-spinner" id="search-spinner">⏳</span>
                 <ul class="suggestions-list" id="suggestions-list"></ul>
             </div>
         </div>
@@ -41,35 +39,25 @@
     <section class="tasks-section" id="tasks-section">
         <div class="container">
             <h2>Popular AI Tasks</h2>
-            <!-- Skeleton loader for tasks -->
-            <div class="task-grid skeleton-task-grid" id="task-grid-skeleton">
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
+            <div class="skeleton-task-grid" id="task-grid-skeleton">
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
             </div>
-            <!-- Real task grid (hidden initially) -->
-            <div class="task-grid" id="task-grid" style="display: none;"></div>
+            <div class="task-grid" id="task-grid" style="display:none;"></div>
         </div>
     </section>
 
     <section class="results-section" id="results-section">
         <div class="container">
             <h2 id="results-title">AI Tools for <span id="selected-task">Task</span></h2>
-            <!-- Skeleton loader for results -->
-            <div class="results-grid skeleton-results-grid" id="results-grid-skeleton">
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
+            <div class="skeleton-results-grid" id="results-grid-skeleton">
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
             </div>
-            <!-- Real results grid (hidden initially) -->
-            <div class="results-grid" id="results-grid" style="display: none;"></div>
+            <div class="results-grid" id="results-grid" style="display:none;"></div>
         </div>
     </section>
 
@@ -104,27 +92,22 @@
     <section class="about-section" id="about-section">
         <div class="container">
             <h2>About AI Tool Finder</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>AI Tool Finder helps you discover the right AI tools for your needs. We make it easy to find, explore, and compare AI solutions.</p>
-                    <p>With so many tools available, it can be hard to choose. That's why we organize and update our directory regularly to guide you quickly to the right tools.</p>
-                    <h3>Contact Us</h3>
-                    <p>Have a suggestion or feedback? Let us know!</p>
-                    <p><i class="fas fa-envelope"></i> Email: <a href="mailto:contact@aitoolfinder.com">contact@aitoolfinder.com</a></p>
-                </div>
+            <div class="about-text">
+                <p>AI Tool Finder helps you discover the right AI tools for your needs. We make it easy to find, explore, and compare AI solutions.</p>
+                <p>With so many tools available, it can be hard to choose. That's why we organize and update our directory regularly to guide you quickly to the right tools.</p>
+                <h3>Contact Us</h3>
+                <p>Have a suggestion or feedback? Let us know!</p>
+                <p><i class="fas fa-envelope"></i> Email: <a href="mailto:contact@aitoolfinder.com">contact@aitoolfinder.com</a></p>
             </div>
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <div class="copyright">
-                <p>&copy; 2025 AI Tool Finder. All rights reserved.</p>
-            </div>
+            <div class="copyright"><p>&copy; 2025 AI Tool Finder. All rights reserved.</p></div>
         </div>
     </footer>
 
-    <!-- Popup overlay -->
     <div class="popup-overlay" id="popup-overlay">
         <div class="popup-box">
             <h2>🔍 Tool Not Available</h2>
@@ -134,29 +117,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scroll and active nav
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                        document.querySelectorAll('.nav a').forEach(navLink => {
-                            navLink.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        const nav = document.querySelector('.nav');
-                        if (window.innerWidth <= 768) {
-                            nav.style.display = 'none';
-                        }
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>
