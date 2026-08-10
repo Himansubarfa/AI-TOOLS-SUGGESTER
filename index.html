@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>AI Tool Finder</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,9 +31,8 @@
             <h1>Find the Perfect AI Tool for Your Task</h1>
             <p>Discover and compare AI tools for any task - from image editing to content creation</p>
             <div class="search-container">
-                <input type="text" placeholder="Search for AI tools...">
-                <button class="btn-primary">Find Tools</button>
-                <!-- Suggestions dropdown -->
+                <input type="text" placeholder="Search for AI tools..." id="search-input">
+                <button class="btn-primary" id="search-btn">Find Tools</button>
                 <ul class="suggestions-list" id="suggestions-list"></ul>
             </div>
         </div>
@@ -42,18 +41,35 @@
     <section class="tasks-section" id="tasks-section">
         <div class="container">
             <h2>Popular AI Tasks</h2>
-            <div class="task-grid" id="task-grid">
-                <!-- Task cards will be dynamically generated here -->
+            <!-- Skeleton loader for tasks -->
+            <div class="task-grid skeleton-task-grid" id="task-grid-skeleton">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
             </div>
+            <!-- Real task grid (hidden initially) -->
+            <div class="task-grid" id="task-grid" style="display: none;"></div>
         </div>
     </section>
 
     <section class="results-section" id="results-section">
         <div class="container">
             <h2 id="results-title">AI Tools for <span id="selected-task">Task</span></h2>
-            <div class="results-grid" id="results-grid">
-                <!-- Tool results will be dynamically generated here -->
+            <!-- Skeleton loader for results -->
+            <div class="results-grid skeleton-results-grid" id="results-grid-skeleton">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
             </div>
+            <!-- Real results grid (hidden initially) -->
+            <div class="results-grid" id="results-grid" style="display: none;"></div>
         </div>
     </section>
 
@@ -120,6 +136,7 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll and active nav
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -127,9 +144,7 @@
                     if (targetId === '#') return;
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
                         document.querySelectorAll('.nav a').forEach(navLink => {
                             navLink.classList.remove('active');
                         });
