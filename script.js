@@ -17,7 +17,7 @@ const tasks = [
     { id: 15, name: "Enhance Photos", icon: "fa-solid fa-wand-magic-sparkles" }
 ];
 
-// Sample AI tools data with actual URLs
+// Sample AI tools data
 const tools = {
     1: [
         { name: "Remove.bg", description: "AI-powered tool that removes backgrounds from images instantly with high accuracy.", url: "https://www.remove.bg/" },
@@ -126,16 +126,112 @@ const tools = {
     ]
 };
 
+// -------- Synonym Map --------
+const TASK_SYNONYMS = {
+    'image': [1, 2, 14, 15],
+    'images': [1, 2, 14, 15],
+    'photo': [1, 2, 14, 15],
+    'photos': [1, 2, 14, 15],
+    'picture': [1, 2, 14, 15],
+    'pictures': [1, 2, 14, 15],
+    'edit': [1, 14, 15, 8],
+    'editing': [1, 14, 15, 8],
+    'fix': [1, 14, 15],
+    'color': [14],
+    'colors': [14],
+    'colour': [14],
+    'enhance': [15],
+    'enhancing': [15],
+    'improve': [15],
+    'background': [1],
+    'back': [1],
+    'remove': [1],
+    'cut': [1],
+    'video': [8],
+    'videos': [8],
+    'movie': [8],
+    'movies': [8],
+    'clip': [8],
+    'clips': [8],
+    'film': [8],
+    'audio': [3, 12],
+    'sound': [3, 12],
+    'speech': [3],
+    'transcribe': [3],
+    'transcription': [3],
+    'music': [12],
+    'song': [12],
+    'songs': [12],
+    'compose': [12],
+    'code': [6],
+    'codes': [6],
+    'program': [6],
+    'programming': [6],
+    'script': [6],
+    'scripts': [6],
+    'software': [6],
+    'developer': [6],
+    'write': [10, 5],
+    'writing': [10, 5],
+    'blog': [10],
+    'blogs': [10],
+    'article': [10],
+    'articles': [10],
+    'post': [10],
+    'posts': [10],
+    'content': [10],
+    'summarize': [5],
+    'summary': [5],
+    'summarising': [5],
+    'shorten': [5],
+    'translate': [7],
+    'translation': [7],
+    'language': [7],
+    'languages': [7],
+    'chat': [9],
+    'chats': [9],
+    'talk': [9],
+    'talking': [9],
+    'conversation': [9],
+    'bot': [9],
+    'bots': [9],
+    'logo': [4],
+    'logos': [4],
+    'brand': [4],
+    'branding': [4],
+    'design': [4, 2],
+    'designing': [4, 2],
+    'detect': [13],
+    'detection': [13],
+    'object': [13],
+    'objects': [13],
+    'recognize': [13],
+    'recognition': [13],
+    'eye': [13],
+    'vision': [13],
+    'ai': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    'artificial': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    'intelligence': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    'create': [2, 8, 4, 12],
+    'creating': [2, 8, 4, 12],
+    'generate': [2, 6, 8, 12],
+    'generating': [2, 6, 8, 12],
+    'make': [2, 8, 4, 12],
+    'making': [2, 8, 4, 12]
+};
+
 // DOM Elements
 const taskGrid = document.getElementById('task-grid');
+const taskGridSkeleton = document.getElementById('task-grid-skeleton');
 const resultsSection = document.getElementById('results-section');
 const selectedTaskSpan = document.getElementById('selected-task');
 const resultsGrid = document.getElementById('results-grid');
+const resultsGridSkeleton = document.getElementById('results-grid-skeleton');
 const mobileMenuBtn = document.querySelector('.mobile-menu');
-const searchInput = document.querySelector('.search-container input');
-const searchButton = document.querySelector('.btn-primary');
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-btn');
 
-// -------- Get or create suggestions list --------
+// Get or create suggestions list
 let suggestionsList = document.getElementById('suggestions-list');
 if (!suggestionsList) {
     suggestionsList = document.createElement('ul');
@@ -144,7 +240,7 @@ if (!suggestionsList) {
     searchInput.parentNode.appendChild(suggestionsList);
 }
 
-// -------- Get or create popup overlay --------
+// Get or create popup overlay
 let popupOverlay = document.getElementById('popup-overlay');
 if (!popupOverlay) {
     popupOverlay = document.createElement('div');
@@ -161,28 +257,48 @@ if (!popupOverlay) {
 }
 const popupCloseBtn = document.getElementById('popup-close-btn');
 
-// Initialize the page
+// -------- Skeleton Control --------
+function showSkeletons() {
+    taskGridSkeleton.style.display = 'grid';
+    taskGrid.style.display = 'none';
+    resultsGridSkeleton.style.display = 'grid';
+    resultsGrid.style.display = 'none';
+    resultsSection.style.display = 'block'; // show section but with skeletons
+}
+
+function hideSkeletonsAndShowReal() {
+    taskGridSkeleton.style.display = 'none';
+    taskGrid.style.display = 'grid';
+    // results are shown only when a search/click happens, so we hide skeletons initially
+    resultsGridSkeleton.style.display = 'none';
+    resultsGrid.style.display = 'grid';
+}
+
+// Initialize
 function init() {
-    renderTasks();
-    setupEventListeners();
+    // Show skeletons initially
+    showSkeletons();
+    // Simulate loading delay (for demo) – in real scenario, data is already loaded,
+    // but we add a small delay to show the skeleton effect.
+    setTimeout(() => {
+        renderTasks();
+        hideSkeletonsAndShowReal();
+        // Hide results section until a task is clicked or search is performed
+        resultsSection.style.display = 'none';
+        setupEventListeners();
+    }, 800); // Simulate network delay
 }
 
 // Render AI task cards
 function renderTasks() {
     taskGrid.innerHTML = '';
-    
     tasks.forEach(task => {
         const taskCard = document.createElement('div');
         taskCard.classList.add('task-card');
         taskCard.dataset.taskId = task.id;
-        
         const visibleContent = document.createElement('div');
         visibleContent.classList.add('task-card-visible');
-        visibleContent.innerHTML = `
-            <i class="${task.icon}"></i>
-            <h3>${task.name}</h3>
-        `;
-        
+        visibleContent.innerHTML = `<i class="${task.icon}"></i><h3>${task.name}</h3>`;
         const hoverContent = document.createElement('div');
         hoverContent.classList.add('task-card-hover');
         const taskTools = tools[task.id] || [];
@@ -193,7 +309,6 @@ function renderTasks() {
         });
         toolsHtml += '</ul>';
         hoverContent.innerHTML = toolsHtml;
-        
         taskCard.appendChild(visibleContent);
         taskCard.appendChild(hoverContent);
         taskGrid.appendChild(taskCard);
@@ -204,11 +319,9 @@ function renderTasks() {
 function renderToolsForTask(taskId) {
     const selectedTask = tasks.find(task => task.id == taskId);
     if (!selectedTask) return;
-    
     selectedTaskSpan.textContent = selectedTask.name;
     resultsGrid.innerHTML = '';
     resultsSection.style.display = 'block';
-    
     const taskTools = tools[taskId] || [];
     taskTools.forEach(tool => {
         const toolCard = document.createElement('div');
@@ -220,45 +333,30 @@ function renderToolsForTask(taskId) {
         `;
         resultsGrid.appendChild(toolCard);
     });
-    
     if (taskTools.length === 0) {
         resultsGrid.innerHTML = '<p>No tools found for this task.</p>';
     }
+    // Hide skeleton for results if visible
+    resultsGridSkeleton.style.display = 'none';
+    resultsGrid.style.display = 'grid';
     resultsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// -------- Display full tools for matched tasks --------
+// Display full tools for matched tasks
 function displayFullToolsForTasks(taskIds, query) {
-    const taskNames = taskIds
-        .map(id => tasks.find(t => t.id == id)?.name)
-        .filter(Boolean)
-        .join(', ');
-
+    const taskNames = taskIds.map(id => tasks.find(t => t.id == id)?.name).filter(Boolean).join(', ');
     selectedTaskSpan.textContent = `Search results for "${query}" (${taskNames})`;
     resultsGrid.innerHTML = '';
     resultsSection.style.display = 'block';
-
     taskIds.forEach((taskId, index) => {
         const task = tasks.find(t => t.id == taskId);
         if (!task) return;
-
         if (taskIds.length > 1) {
             const header = document.createElement('div');
-            header.style.cssText = `
-                grid-column: 1 / -1;
-                margin-top: ${index === 0 ? '0' : '30px'};
-                margin-bottom: 10px;
-                border-bottom: 2px solid #e0e0e0;
-                padding-bottom: 10px;
-            `;
-            header.innerHTML = `
-                <h2 style="color: #333; font-size: 1.5rem;">
-                    <i class="${task.icon}"></i> ${task.name}
-                </h2>
-            `;
+            header.style.cssText = `grid-column: 1 / -1; margin-top: ${index === 0 ? '0' : '30px'}; margin-bottom: 10px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;`;
+            header.innerHTML = `<h2 style="color: #333; font-size: 1.5rem;"><i class="${task.icon}"></i> ${task.name}</h2>`;
             resultsGrid.appendChild(header);
         }
-
         const taskTools = tools[taskId] || [];
         taskTools.forEach(tool => {
             const toolCard = document.createElement('div');
@@ -271,93 +369,93 @@ function displayFullToolsForTasks(taskIds, query) {
             resultsGrid.appendChild(toolCard);
         });
     });
-
+    // Hide skeleton for results
+    resultsGridSkeleton.style.display = 'none';
+    resultsGrid.style.display = 'grid';
     resultsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// -------- Perform search (triggered by Enter or button click) --------
-function performSearch(query) {
-    if (!query.trim()) return;
-    const q = query.toLowerCase().trim();
-    const matchedTaskIds = new Set();
+// -------- SMART SEARCH (with synonyms) --------
+function getExpandedTaskIds(query) {
+    const tokens = query.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0);
+    const matchedIds = new Set();
 
+    const stem = (word) => word.replace(/(ing|s|es|ed)$/, '');
+
+    // 1. Direct match in task names and tool descriptions
     tasks.forEach(task => {
-        if (task.name.toLowerCase().includes(q)) {
-            matchedTaskIds.add(task.id);
+        const taskName = task.name.toLowerCase();
+        if (tokens.some(t => taskName.includes(t) || taskName.includes(stem(t)))) {
+            matchedIds.add(task.id);
         }
     });
-
     for (const [taskId, toolList] of Object.entries(tools)) {
-        toolList.forEach(tool => {
-            if (tool.name.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q)) {
-                matchedTaskIds.add(Number(taskId));
+        for (const tool of toolList) {
+            const text = (tool.name + ' ' + tool.description).toLowerCase();
+            if (tokens.some(t => text.includes(t) || text.includes(stem(t)))) {
+                matchedIds.add(Number(taskId));
             }
-        });
+        }
     }
 
-    if (matchedTaskIds.size === 0) {
+    // 2. Synonym matching
+    for (const token of tokens) {
+        const stemmed = stem(token);
+        if (TASK_SYNONYMS[token]) {
+            TASK_SYNONYMS[token].forEach(id => matchedIds.add(id));
+        }
+        if (TASK_SYNONYMS[stemmed] && stemmed !== token) {
+            TASK_SYNONYMS[stemmed].forEach(id => matchedIds.add(id));
+        }
+        // Also check full query as phrase
+        const fullQuery = query.toLowerCase().trim();
+        if (TASK_SYNONYMS[fullQuery]) {
+            TASK_SYNONYMS[fullQuery].forEach(id => matchedIds.add(id));
+        }
+        const stemmedFull = stem(fullQuery);
+        if (TASK_SYNONYMS[stemmedFull] && stemmedFull !== fullQuery) {
+            TASK_SYNONYMS[stemmedFull].forEach(id => matchedIds.add(id));
+        }
+    }
+    return matchedIds;
+}
+
+function performSearch(query) {
+    if (!query.trim()) return;
+    const matchedIds = getExpandedTaskIds(query);
+    if (matchedIds.size === 0) {
         showPopup();
         return;
     }
-
-    displayFullToolsForTasks(Array.from(matchedTaskIds), q);
+    displayFullToolsForTasks(Array.from(matchedIds), query);
     hideSuggestions();
 }
 
-// -------- Autocomplete logic --------
+// -------- Autocomplete --------
 let debounceTimer;
 
 function handleSearchInput(e) {
     const query = e.target.value.trim();
     clearTimeout(debounceTimer);
-
     if (query.length === 0) {
         hideSuggestions();
         return;
     }
-
     debounceTimer = setTimeout(() => {
-        const suggestions = getSuggestions(query);
-        renderSuggestions(suggestions);
-    }, 200);
-}
-
-function getSuggestions(query) {
-    const q = query.toLowerCase();
-    const results = [];
-
-    tasks.forEach(task => {
-        if (task.name.toLowerCase().includes(q)) {
-            results.push({
-                label: task.name,
-                type: 'task',
-                taskId: task.id
-            });
-        }
-    });
-
-    for (const [taskId, toolList] of Object.entries(tools)) {
-        toolList.forEach(tool => {
-            if (tool.name.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q)) {
-                results.push({
-                    label: tool.name,
-                    type: 'tool',
-                    taskId: Number(taskId),
-                    toolName: tool.name
-                });
-            }
+        const matchedIds = getExpandedTaskIds(query);
+        const suggestions = [];
+        matchedIds.forEach(id => {
+            const task = tasks.find(t => t.id === id);
+            if (task) suggestions.push({ label: task.name, type: 'task', taskId: id });
         });
-    }
-
-    const seen = new Set();
-    const unique = results.filter(item => {
-        const key = `${item.type}-${item.label}-${item.taskId}`;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    });
-
-    return unique.slice(0, 8);
+        const seen = new Set();
+        const unique = suggestions.filter(s => {
+            if (seen.has(s.label)) return false;
+            seen.add(s.label);
+            return true;
+        });
+        renderSuggestions(unique.slice(0, 8));
+    }, 200);
 }
 
 function renderSuggestions(suggestions) {
@@ -366,15 +464,10 @@ function renderSuggestions(suggestions) {
         hideSuggestions();
         return;
     }
-
     suggestions.forEach(suggestion => {
         const li = document.createElement('li');
-        li.innerHTML = `
-            ${suggestion.label}
-            <span class="suggestion-type">${suggestion.type}</span>
-        `;
+        li.innerHTML = `${suggestion.label} <span class="suggestion-type">${suggestion.type}</span>`;
         li.dataset.taskId = suggestion.taskId;
-        li.dataset.type = suggestion.type;
         li.addEventListener('mousedown', (e) => {
             e.preventDefault();
             searchInput.value = suggestion.label;
@@ -383,7 +476,6 @@ function renderSuggestions(suggestions) {
         });
         suggestionsList.appendChild(li);
     });
-
     suggestionsList.style.display = 'block';
 }
 
@@ -392,7 +484,7 @@ function hideSuggestions() {
     suggestionsList.innerHTML = '';
 }
 
-// -------- Popup functions --------
+// Popup functions
 function showPopup() {
     popupOverlay.style.display = 'flex';
     popupCloseBtn.focus();
@@ -403,29 +495,23 @@ function hidePopup() {
     searchInput.focus();
 }
 
-// -------- Set up event listeners --------
+// -------- Event Listeners --------
 function setupEventListeners() {
-    // Task card click
+    // Task card clicks
     taskGrid.addEventListener('click', (e) => {
         const toolLink = e.target.closest('.tool-link');
-        if (toolLink) {
-            e.stopPropagation();
-            return;
-        }
+        if (toolLink) { e.stopPropagation(); return; }
         const taskCard = e.target.closest('.task-card');
         if (!taskCard) return;
-        document.querySelectorAll('.task-card').forEach(card => card.classList.remove('active'));
+        document.querySelectorAll('.task-card').forEach(c => c.classList.remove('active'));
         taskCard.classList.add('active');
-        const taskId = taskCard.dataset.taskId;
-        renderToolsForTask(taskId);
+        renderToolsForTask(taskCard.dataset.taskId);
         hideSuggestions();
     });
 
-    // Touch events for tool links
+    // Touch events for tool links (mobile)
     document.querySelectorAll('.tool-link').forEach(link => {
-        link.addEventListener('touchstart', (e) => {
-            e.stopPropagation();
-        });
+        link.addEventListener('touchstart', (e) => e.stopPropagation());
     });
 
     // Mobile menu
@@ -436,32 +522,31 @@ function setupEventListeners() {
 
     window.addEventListener('resize', () => {
         const nav = document.querySelector('.nav');
-        if (window.innerWidth > 768) {
-            nav.style.display = 'flex';
-        } else {
-            nav.style.display = 'none';
-        }
+        if (window.innerWidth > 768) nav.style.display = 'flex';
+        else nav.style.display = 'none';
     });
 
-    // -------- Search input events --------
+    // Search input
     searchInput.addEventListener('input', handleSearchInput);
-
     searchInput.addEventListener('focus', () => {
         if (searchInput.value.trim().length > 0) {
-            const suggestions = getSuggestions(searchInput.value.trim());
-            renderSuggestions(suggestions);
+            const matchedIds = getExpandedTaskIds(searchInput.value.trim());
+            const suggestions = [];
+            matchedIds.forEach(id => {
+                const task = tasks.find(t => t.id === id);
+                if (task) suggestions.push({ label: task.name, type: 'task', taskId: id });
+            });
+            const seen = new Set();
+            const unique = suggestions.filter(s => {
+                if (seen.has(s.label)) return false;
+                seen.add(s.label);
+                return true;
+            });
+            renderSuggestions(unique.slice(0, 8));
         }
     });
-
-    searchInput.addEventListener('blur', () => {
-        setTimeout(hideSuggestions, 150);
-    });
-
-    searchButton.addEventListener('click', () => {
-        performSearch(searchInput.value);
-        hideSuggestions();
-    });
-
+    searchInput.addEventListener('blur', () => setTimeout(hideSuggestions, 150));
+    searchButton.addEventListener('click', () => { performSearch(searchInput.value); hideSuggestions(); });
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             performSearch(searchInput.value);
@@ -469,24 +554,18 @@ function setupEventListeners() {
         }
     });
 
-    // -------- Popup close events --------
+    // Popup close
     popupCloseBtn.addEventListener('click', hidePopup);
-
     popupOverlay.addEventListener('click', (e) => {
-        if (e.target === popupOverlay) {
-            hidePopup();
-        }
+        if (e.target === popupOverlay) hidePopup();
     });
-
     document.addEventListener('keydown', (e) => {
-        if (popupOverlay.style.display === 'flex') {
-            if (e.key === 'Escape' || e.key === 'Enter') {
-                e.preventDefault();
-                hidePopup();
-            }
+        if (popupOverlay.style.display === 'flex' && (e.key === 'Escape' || e.key === 'Enter')) {
+            e.preventDefault();
+            hidePopup();
         }
     });
 }
 
-// Initialize
+// Start the app
 document.addEventListener('DOMContentLoaded', init);
