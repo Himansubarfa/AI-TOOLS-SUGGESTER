@@ -1,4 +1,4 @@
-// AI task data
+// ==================== DATA ====================
 const tasks = [
     { id: 1, name: "Remove Image Background", icon: "fa-solid fa-cut" },
     { id: 2, name: "Create AI Images", icon: "fa-solid fa-image" },
@@ -17,7 +17,6 @@ const tasks = [
     { id: 15, name: "Enhance Photos", icon: "fa-solid fa-wand-magic-sparkles" }
 ];
 
-// Sample AI tools data (same as before)
 const tools = {
     1: [
         { name: "Remove.bg", description: "AI-powered tool that removes backgrounds from images instantly with high accuracy.", url: "https://www.remove.bg/" },
@@ -126,142 +125,43 @@ const tools = {
     ]
 };
 
-// -------- 🔥 EXPANDED SYNONYM MAP (with your requested phrases) --------
+// ==================== SYNONYMS ====================
 const TASK_SYNONYMS = {
-    // Image related
-    'image': [1, 2, 14, 15],
-    'images': [1, 2, 14, 15],
-    'photo': [1, 2, 14, 15],
-    'photos': [1, 2, 14, 15],
-    'picture': [1, 2, 14, 15],
-    'pictures': [1, 2, 14, 15],
-    'image editor': [1, 14, 15, 8],
-    'image editors': [1, 14, 15, 8],
-    'image eraser': [1],
-    'photo editor': [1, 14, 15],
-    'photo editors': [1, 14, 15],
-    'picture editor': [1, 14, 15],
-    'picture editors': [1, 14, 15],
-    'image manipulation': [1, 14, 15],
-    'photo manipulation': [1, 14, 15],
-    'graphic design': [2, 4, 14],
-    'logo design': [4],
-    // Background
-    'background': [1],
-    'back': [1],
-    'background remover': [1],
-    'background removers': [1],
-    'remove background': [1],
-    // Edit / Enhance
-    'edit': [1, 14, 15, 8],
-    'editing': [1, 14, 15, 8],
-    'fix': [1, 14, 15],
-    'enhance': [15],
-    'enhancing': [15],
-    'improve': [15],
-    // Color
-    'color': [14],
-    'colors': [14],
-    'colour': [14],
-    // Video
-    'video': [8],
-    'videos': [8],
-    'movie': [8],
-    'movies': [8],
-    'clip': [8],
-    'clips': [8],
-    'film': [8],
-    'video editor': [8],
-    'video editors': [8],
-    'edit video': [8],
-    'edit videos': [8],
-    // Audio / Music
-    'audio': [3, 12],
-    'sound': [3, 12],
-    'speech': [3],
-    'transcribe': [3],
-    'transcription': [3],
-    'speech to text': [3],
-    'music': [12],
-    'song': [12],
-    'songs': [12],
-    'compose': [12],
-    'music generator': [12],
-    'sound editor': [3, 12],
-    // Code
-    'code': [6],
-    'codes': [6],
-    'program': [6],
-    'programming': [6],
-    'script': [6],
-    'scripts': [6],
-    'software': [6],
-    'developer': [6],
-    'code assistant': [6],
-    'coding assistant': [6],
-    'programming assistant': [6],
-    // Writing / Text
-    'write': [10, 5],
-    'writing': [10, 5],
-    'blog': [10],
-    'blogs': [10],
-    'article': [10],
-    'articles': [10],
-    'post': [10],
-    'posts': [10],
-    'content': [10],
-    'summarize': [5],
-    'summary': [5],
-    'summarising': [5],
-    'shorten': [5],
-    'translate': [7],
-    'translation': [7],
-    'language': [7],
-    'languages': [7],
-    'translation tool': [7],
-    // Chat / Bots
-    'chat': [9],
-    'chats': [9],
-    'talk': [9],
-    'talking': [9],
-    'conversation': [9],
-    'bot': [9],
-    'bots': [9],
-    'chat bot': [9],
-    'chatbots': [9],
-    'conversational ai': [9],
-    // Logos / Design
-    'logo': [4],
-    'logos': [4],
-    'brand': [4],
-    'branding': [4],
-    'design': [4, 2],
-    'designing': [4, 2],
-    // Detection
-    'detect': [13],
-    'detection': [13],
-    'object': [13],
-    'objects': [13],
-    'recognize': [13],
-    'recognition': [13],
-    'eye': [13],
-    'vision': [13],
-    'object detection': [13],
-    'image recognition': [13],
-    // General AI
+    'image': [1,2,14,15], 'images': [1,2,14,15], 'photo': [1,2,14,15], 'photos': [1,2,14,15],
+    'picture': [1,2,14,15], 'pictures': [1,2,14,15],
+    'image editor': [1,14,15,8], 'image editors': [1,14,15,8], 'image eraser': [1],
+    'photo editor': [1,14,15], 'photo editors': [1,14,15],
+    'picture editor': [1,14,15], 'picture editors': [1,14,15],
+    'background': [1], 'back': [1], 'background remover': [1], 'background removers': [1], 'remove background': [1],
+    'edit': [1,14,15,8], 'editing': [1,14,15,8], 'fix': [1,14,15],
+    'enhance': [15], 'enhancing': [15], 'improve': [15],
+    'color': [14], 'colors': [14], 'colour': [14],
+    'video': [8], 'videos': [8], 'movie': [8], 'movies': [8], 'clip': [8], 'clips': [8], 'film': [8],
+    'video editor': [8], 'video editors': [8], 'edit video': [8], 'edit videos': [8],
+    'audio': [3,12], 'sound': [3,12], 'speech': [3], 'transcribe': [3], 'transcription': [3], 'speech to text': [3],
+    'music': [12], 'song': [12], 'songs': [12], 'compose': [12], 'music generator': [12], 'sound editor': [3,12],
+    'code': [6], 'codes': [6], 'program': [6], 'programming': [6], 'script': [6], 'scripts': [6],
+    'software': [6], 'developer': [6], 'code assistant': [6], 'coding assistant': [6], 'programming assistant': [6],
+    'write': [10,5], 'writing': [10,5], 'blog': [10], 'blogs': [10], 'article': [10], 'articles': [10],
+    'post': [10], 'posts': [10], 'content': [10],
+    'summarize': [5], 'summary': [5], 'summarising': [5], 'shorten': [5],
+    'translate': [7], 'translation': [7], 'language': [7], 'languages': [7], 'translation tool': [7],
+    'chat': [9], 'chats': [9], 'talk': [9], 'talking': [9], 'conversation': [9],
+    'bot': [9], 'bots': [9], 'chat bot': [9], 'chatbots': [9], 'conversational ai': [9],
+    'logo': [4], 'logos': [4], 'brand': [4], 'branding': [4], 'design': [4,2], 'designing': [4,2],
+    'logo design': [4], 'graphic design': [2,4,14],
+    'detect': [13], 'detection': [13], 'object': [13], 'objects': [13], 'recognize': [13],
+    'recognition': [13], 'eye': [13], 'vision': [13], 'object detection': [13], 'image recognition': [13],
     'ai': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
     'artificial': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
     'intelligence': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
-    'create': [2, 8, 4, 12],
-    'creating': [2, 8, 4, 12],
-    'generate': [2, 6, 8, 12],
-    'generating': [2, 6, 8, 12],
-    'make': [2, 8, 4, 12],
-    'making': [2, 8, 4, 12],
+    'create': [2,8,4,12], 'creating': [2,8,4,12],
+    'generate': [2,6,8,12], 'generating': [2,6,8,12],
+    'make': [2,8,4,12], 'making': [2,8,4,12],
     'sentiment analysis': [11]
 };
 
-// DOM Elements
+// ==================== DOM REFS ====================
 const taskGrid = document.getElementById('task-grid');
 const taskGridSkeleton = document.getElementById('task-grid-skeleton');
 const resultsSection = document.getElementById('results-section');
@@ -271,67 +171,27 @@ const resultsGridSkeleton = document.getElementById('results-grid-skeleton');
 const mobileMenuBtn = document.querySelector('.mobile-menu');
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-btn');
-
-// -------- CREATE SPINNER ELEMENT (realtime indicator) --------
-const spinner = document.createElement('span');
-spinner.className = 'search-spinner';
-spinner.innerHTML = '⏳';
-spinner.style.cssText = `
-    position: absolute;
-    right: 140px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    display: none;
-    animation: spin 1s linear infinite;
-`;
-// Add spinner inside search container
-const searchContainer = document.querySelector('.search-container');
-if (searchContainer) {
-    searchContainer.style.position = 'relative';
-    searchContainer.appendChild(spinner);
-}
-
-// Add keyframes for spinner rotation
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
-    @keyframes spin {
-        0% { transform: translateY(-50%) rotate(0deg); }
-        100% { transform: translateY(-50%) rotate(360deg); }
-    }
-    .search-spinner.show {
-        display: inline-block !important;
-    }
-`;
-document.head.appendChild(styleSheet);
-
-// Get or create suggestions list
-let suggestionsList = document.getElementById('suggestions-list');
-if (!suggestionsList) {
-    suggestionsList = document.createElement('ul');
-    suggestionsList.id = 'suggestions-list';
-    suggestionsList.className = 'suggestions-list';
-    searchInput.parentNode.appendChild(suggestionsList);
-}
-
-// Get or create popup overlay
-let popupOverlay = document.getElementById('popup-overlay');
-if (!popupOverlay) {
-    popupOverlay = document.createElement('div');
-    popupOverlay.id = 'popup-overlay';
-    popupOverlay.className = 'popup-overlay';
-    popupOverlay.innerHTML = `
-        <div class="popup-box">
-            <h2>🔍 Tool Not Available</h2>
-            <p>We couldn't find any AI tool matching your search.</p>
-            <button class="popup-close-btn" id="popup-close-btn">OK</button>
-        </div>
-    `;
-    document.body.appendChild(popupOverlay);
-}
+const suggestionsList = document.getElementById('suggestions-list');
+const popupOverlay = document.getElementById('popup-overlay');
 const popupCloseBtn = document.getElementById('popup-close-btn');
+const spinner = document.getElementById('search-spinner');
 
-// -------- Skeleton Control --------
+// ==================== SEARCH HISTORY ====================
+const MAX_HISTORY = 5;
+let searchHistory = JSON.parse(localStorage.getItem('aiToolSearchHistory')) || [];
+
+function addToHistory(query) {
+    query = query.trim();
+    if (!query) return;
+    searchHistory = searchHistory.filter(item => item.toLowerCase() !== query.toLowerCase());
+    searchHistory.unshift(query);
+    if (searchHistory.length > MAX_HISTORY) searchHistory.pop();
+    localStorage.setItem('aiToolSearchHistory', JSON.stringify(searchHistory));
+}
+
+function getHistory() { return searchHistory; }
+
+// ==================== SKELETON ====================
 function showSkeletons() {
     taskGridSkeleton.style.display = 'grid';
     taskGrid.style.display = 'none';
@@ -347,94 +207,80 @@ function hideSkeletonsAndShowReal() {
     resultsGrid.style.display = 'grid';
 }
 
-// Initialize
-function init() {
-    showSkeletons();
-    setTimeout(() => {
-        renderTasks();
-        hideSkeletonsAndShowReal();
-        resultsSection.style.display = 'none';
-        setupEventListeners();
-    }, 800);
-}
-
-// Render AI task cards
+// ==================== RENDER TASKS ====================
 function renderTasks() {
     taskGrid.innerHTML = '';
     tasks.forEach(task => {
-        const taskCard = document.createElement('div');
-        taskCard.classList.add('task-card');
-        taskCard.dataset.taskId = task.id;
-        const visibleContent = document.createElement('div');
-        visibleContent.classList.add('task-card-visible');
-        visibleContent.innerHTML = `<i class="${task.icon}"></i><h3>${task.name}</h3>`;
-        const hoverContent = document.createElement('div');
-        hoverContent.classList.add('task-card-hover');
-        const taskTools = tools[task.id] || [];
-        let toolsHtml = '<h4>Popular Tools:</h4><ul>';
-        const displayTools = taskTools.slice(0, 3);
-        displayTools.forEach(tool => {
-            toolsHtml += `<li><a href="${tool.url}" class="tool-link" target="_blank" rel="noopener">${tool.name}</a></li>`;
-        });
-        toolsHtml += '</ul>';
-        hoverContent.innerHTML = toolsHtml;
-        taskCard.appendChild(visibleContent);
-        taskCard.appendChild(hoverContent);
-        taskGrid.appendChild(taskCard);
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.dataset.taskId = task.id;
+        card.innerHTML = `
+            <div class="task-card-visible">
+                <i class="${task.icon}"></i>
+                <h3>${task.name}</h3>
+            </div>
+            <div class="task-card-hover">
+                <h4>Popular Tools:</h4>
+                <ul>
+                    ${(tools[task.id] || []).slice(0,3).map(t => `
+                        <li><a href="${t.url}" class="tool-link" target="_blank" rel="noopener">${t.name}</a></li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+        taskGrid.appendChild(card);
     });
 }
 
-// Render tools for a selected task
+// ==================== RENDER TOOLS FOR TASK ====================
 function renderToolsForTask(taskId) {
-    const selectedTask = tasks.find(task => task.id == taskId);
-    if (!selectedTask) return;
-    selectedTaskSpan.textContent = selectedTask.name;
+    const task = tasks.find(t => t.id == taskId);
+    if (!task) return;
+    selectedTaskSpan.textContent = task.name;
     resultsGrid.innerHTML = '';
     resultsSection.style.display = 'block';
-    const taskTools = tools[taskId] || [];
-    taskTools.forEach(tool => {
-        const toolCard = document.createElement('div');
-        toolCard.classList.add('tool-card');
-        toolCard.innerHTML = `
+    const list = tools[taskId] || [];
+    list.forEach(tool => {
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        card.innerHTML = `
             <h3>${tool.name}</h3>
             <p>${tool.description}</p>
             <a href="${tool.url}" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
         `;
-        resultsGrid.appendChild(toolCard);
+        resultsGrid.appendChild(card);
     });
-    if (taskTools.length === 0) {
-        resultsGrid.innerHTML = '<p>No tools found for this task.</p>';
-    }
+    if (!list.length) resultsGrid.innerHTML = '<p>No tools found.</p>';
     resultsGridSkeleton.style.display = 'none';
     resultsGrid.style.display = 'grid';
     resultsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Display full tools for matched tasks
+// ==================== DISPLAY SEARCH RESULTS ====================
 function displayFullToolsForTasks(taskIds, query) {
     const taskNames = taskIds.map(id => tasks.find(t => t.id == id)?.name).filter(Boolean).join(', ');
     selectedTaskSpan.textContent = `Search results for "${query}" (${taskNames})`;
     resultsGrid.innerHTML = '';
     resultsSection.style.display = 'block';
-    taskIds.forEach((taskId, index) => {
-        const task = tasks.find(t => t.id == taskId);
+    taskIds.forEach((id, idx) => {
+        const task = tasks.find(t => t.id == id);
         if (!task) return;
         if (taskIds.length > 1) {
             const header = document.createElement('div');
-            header.style.cssText = `grid-column: 1 / -1; margin-top: ${index === 0 ? '0' : '30px'}; margin-bottom: 10px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;`;
-            header.innerHTML = `<h2 style="color: #333; font-size: 1.5rem;"><i class="${task.icon}"></i> ${task.name}</h2>`;
+            header.style.cssText = `grid-column:1/-1; margin-top:${idx===0?'0':'30px'}; border-bottom:2px solid #e0e0e0; padding-bottom:10px;`;
+            header.innerHTML = `<h2 style="color:#333; font-size:1.5rem;"><i class="${task.icon}"></i> ${task.name}</h2>`;
             resultsGrid.appendChild(header);
         }
-        const taskTools = tools[taskId] || [];
-        taskTools.forEach(tool => {
-            const toolCard = document.createElement('div');
-            toolCard.classList.add('tool-card');
-            toolCard.innerHTML = `
+        const list = tools[id] || [];
+        list.forEach(tool => {
+            const card = document.createElement('div');
+            card.className = 'tool-card';
+            card.innerHTML = `
                 <h3>${tool.name}</h3>
                 <p>${tool.description}</p>
                 <a href="${tool.url}" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
             `;
-            resultsGrid.appendChild(toolCard);
+            resultsGrid.appendChild(card);
         });
     });
     resultsGridSkeleton.style.display = 'none';
@@ -442,100 +288,77 @@ function displayFullToolsForTasks(taskIds, query) {
     resultsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// -------- SMART SEARCH (with synonyms + stemming) --------
+// ==================== SMART SEARCH ====================
 function getExpandedTaskIds(query) {
     const tokens = query.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0);
-    const matchedIds = new Set();
+    const matched = new Set();
 
-    const stem = (word) => word.replace(/(ing|s|es|ed)$/, '');
+    const stem = w => w.replace(/(ing|s|es|ed)$/, '');
 
-    // 1. Direct match in task names and tool descriptions
     tasks.forEach(task => {
-        const taskName = task.name.toLowerCase();
-        if (tokens.some(t => taskName.includes(t) || taskName.includes(stem(t)))) {
-            matchedIds.add(task.id);
+        const name = task.name.toLowerCase();
+        if (tokens.some(t => name.includes(t) || name.includes(stem(t)))) {
+            matched.add(task.id);
         }
     });
-    for (const [taskId, toolList] of Object.entries(tools)) {
-        for (const tool of toolList) {
+    for (const [id, list] of Object.entries(tools)) {
+        for (const tool of list) {
             const text = (tool.name + ' ' + tool.description).toLowerCase();
             if (tokens.some(t => text.includes(t) || text.includes(stem(t)))) {
-                matchedIds.add(Number(taskId));
+                matched.add(Number(id));
             }
         }
     }
 
-    // 2. Synonym matching (including exact phrases)
     for (const token of tokens) {
         const stemmed = stem(token);
-        // Check exact token
-        if (TASK_SYNONYMS[token]) {
-            TASK_SYNONYMS[token].forEach(id => matchedIds.add(id));
-        }
-        // Check stemmed version
-        if (TASK_SYNONYMS[stemmed] && stemmed !== token) {
-            TASK_SYNONYMS[stemmed].forEach(id => matchedIds.add(id));
-        }
-        // Check the whole query as a single phrase (e.g., "image editor")
-        const fullQuery = query.toLowerCase().trim();
-        if (TASK_SYNONYMS[fullQuery]) {
-            TASK_SYNONYMS[fullQuery].forEach(id => matchedIds.add(id));
-        }
-        const stemmedFull = stem(fullQuery);
-        if (TASK_SYNONYMS[stemmedFull] && stemmedFull !== fullQuery) {
-            TASK_SYNONYMS[stemmedFull].forEach(id => matchedIds.add(id));
-        }
+        if (TASK_SYNONYMS[token]) TASK_SYNONYMS[token].forEach(id => matched.add(id));
+        if (TASK_SYNONYMS[stemmed] && stemmed !== token) TASK_SYNONYMS[stemmed].forEach(id => matched.add(id));
     }
-    return matchedIds;
+    const full = query.toLowerCase().trim();
+    if (TASK_SYNONYMS[full]) TASK_SYNONYMS[full].forEach(id => matched.add(id));
+    const stemFull = stem(full);
+    if (TASK_SYNONYMS[stemFull] && stemFull !== full) TASK_SYNONYMS[stemFull].forEach(id => matched.add(id));
+
+    return matched;
 }
 
-// -------- PERFORM SEARCH (with realtime spinner) --------
+// ==================== PERFORM SEARCH ====================
 function performSearch(query) {
-    if (!query.trim()) {
-        hideSuggestions();
-        return;
-    }
-    // Show spinner
+    if (!query.trim()) return;
+    addToHistory(query);
     spinner.classList.add('show');
-    
-    // Simulate a tiny delay to show the spinner (for realtime feel)
     setTimeout(() => {
-        const matchedIds = getExpandedTaskIds(query);
+        const matched = getExpandedTaskIds(query);
         spinner.classList.remove('show');
-        if (matchedIds.size === 0) {
+        if (matched.size === 0) {
             showPopup();
             return;
         }
-        displayFullToolsForTasks(Array.from(matchedIds), query);
+        displayFullToolsForTasks(Array.from(matched), query);
         hideSuggestions();
-    }, 150); // small delay to show spinner
+    }, 150);
 }
 
-// -------- AUTOCOMPLETE (realtime, debounce 100ms) --------
+// ==================== SUGGESTIONS (history + real‑time) ====================
 let debounceTimer;
 
 function handleSearchInput(e) {
     const query = e.target.value.trim();
     clearTimeout(debounceTimer);
-    
     if (query.length === 0) {
-        hideSuggestions();
-        spinner.classList.remove('show');
+        showHistorySuggestions();
         return;
     }
-
-    // Show spinner while "thinking"
     spinner.classList.add('show');
-
     debounceTimer = setTimeout(() => {
-        const matchedIds = getExpandedTaskIds(query);
+        const matched = getExpandedTaskIds(query);
         spinner.classList.remove('show');
         const suggestions = [];
-        matchedIds.forEach(id => {
+        matched.forEach(id => {
             const task = tasks.find(t => t.id === id);
-            if (task) suggestions.push({ label: task.name, type: 'task', taskId: id });
+            if (task) suggestions.push({ label: task.name, taskId: id });
         });
-        // Remove duplicates
         const seen = new Set();
         const unique = suggestions.filter(s => {
             if (seen.has(s.label)) return false;
@@ -543,7 +366,17 @@ function handleSearchInput(e) {
             return true;
         });
         renderSuggestions(unique.slice(0, 8));
-    }, 100); // 100ms debounce – feels instant
+    }, 100);
+}
+
+function showHistorySuggestions() {
+    const history = getHistory();
+    if (history.length === 0) {
+        hideSuggestions();
+        return;
+    }
+    const items = history.map(q => ({ label: q, taskId: null }));
+    renderSuggestions(items);
 }
 
 function renderSuggestions(suggestions) {
@@ -552,15 +385,19 @@ function renderSuggestions(suggestions) {
         hideSuggestions();
         return;
     }
-    suggestions.forEach(suggestion => {
+    suggestions.forEach(s => {
         const li = document.createElement('li');
-        li.innerHTML = `${suggestion.label} <span class="suggestion-type">${suggestion.type}</span>`;
-        li.dataset.taskId = suggestion.taskId;
+        li.textContent = s.label; // 👈 Only the text – no "task" label
+        li.dataset.taskId = s.taskId;
         li.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            searchInput.value = suggestion.label;
+            searchInput.value = s.label;
             hideSuggestions();
-            performSearch(suggestion.label);
+            if (s.taskId !== null) {
+                renderToolsForTask(s.taskId);
+            } else {
+                performSearch(s.label);
+            }
         });
         suggestionsList.appendChild(li);
     });
@@ -572,7 +409,7 @@ function hideSuggestions() {
     suggestionsList.innerHTML = '';
 }
 
-// Popup functions
+// ==================== POPUP ====================
 function showPopup() {
     popupOverlay.style.display = 'flex';
     popupCloseBtn.focus();
@@ -583,47 +420,54 @@ function hidePopup() {
     searchInput.focus();
 }
 
-// -------- Event Listeners --------
+// ==================== INIT ====================
+function init() {
+    showSkeletons();
+    setTimeout(() => {
+        renderTasks();
+        hideSkeletonsAndShowReal();
+        resultsSection.style.display = 'none';
+        setupEventListeners();
+    }, 300);
+}
+
+// ==================== EVENT LISTENERS ====================
 function setupEventListeners() {
-    // Task card clicks
     taskGrid.addEventListener('click', (e) => {
-        const toolLink = e.target.closest('.tool-link');
-        if (toolLink) { e.stopPropagation(); return; }
-        const taskCard = e.target.closest('.task-card');
-        if (!taskCard) return;
+        const link = e.target.closest('.tool-link');
+        if (link) { e.stopPropagation(); return; }
+        const card = e.target.closest('.task-card');
+        if (!card) return;
         document.querySelectorAll('.task-card').forEach(c => c.classList.remove('active'));
-        taskCard.classList.add('active');
-        renderToolsForTask(taskCard.dataset.taskId);
+        card.classList.add('active');
+        renderToolsForTask(card.dataset.taskId);
         hideSuggestions();
     });
 
-    // Touch events for tool links (mobile)
     document.querySelectorAll('.tool-link').forEach(link => {
-        link.addEventListener('touchstart', (e) => e.stopPropagation());
+        link.addEventListener('touchstart', e => e.stopPropagation());
     });
 
-    // Mobile menu
     mobileMenuBtn.addEventListener('click', () => {
         const nav = document.querySelector('.nav');
         nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
     });
-
     window.addEventListener('resize', () => {
         const nav = document.querySelector('.nav');
         if (window.innerWidth > 768) nav.style.display = 'flex';
         else nav.style.display = 'none';
     });
 
-    // -------- REALTIME SEARCH EVENTS --------
     searchInput.addEventListener('input', handleSearchInput);
-    
     searchInput.addEventListener('focus', () => {
-        if (searchInput.value.trim().length > 0) {
-            const matchedIds = getExpandedTaskIds(searchInput.value.trim());
+        if (searchInput.value.trim().length === 0) {
+            showHistorySuggestions();
+        } else {
+            const matched = getExpandedTaskIds(searchInput.value.trim());
             const suggestions = [];
-            matchedIds.forEach(id => {
+            matched.forEach(id => {
                 const task = tasks.find(t => t.id === id);
-                if (task) suggestions.push({ label: task.name, type: 'task', taskId: id });
+                if (task) suggestions.push({ label: task.name, taskId: id });
             });
             const seen = new Set();
             const unique = suggestions.filter(s => {
@@ -634,14 +478,11 @@ function setupEventListeners() {
             renderSuggestions(unique.slice(0, 8));
         }
     });
-    
     searchInput.addEventListener('blur', () => setTimeout(hideSuggestions, 150));
-    
     searchButton.addEventListener('click', () => {
         performSearch(searchInput.value);
         hideSuggestions();
     });
-    
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             performSearch(searchInput.value);
@@ -649,7 +490,6 @@ function setupEventListeners() {
         }
     });
 
-    // Popup close
     popupCloseBtn.addEventListener('click', hidePopup);
     popupOverlay.addEventListener('click', (e) => {
         if (e.target === popupOverlay) hidePopup();
@@ -660,7 +500,23 @@ function setupEventListeners() {
             hidePopup();
         }
     });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                document.querySelectorAll('.nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav').style.display = 'none';
+                }
+            }
+        });
+    });
 }
 
-// Start the app
 document.addEventListener('DOMContentLoaded', init);
