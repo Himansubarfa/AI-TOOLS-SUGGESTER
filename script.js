@@ -132,6 +132,34 @@ const resultsSection = document.getElementById('results-section');
 const selectedTaskSpan = document.getElementById('selected-task');
 const resultsGrid = document.getElementById('results-grid');
 const mobileMenuBtn = document.querySelector('.mobile-menu');
+const searchInput = document.querySelector('.search-container input');
+const searchButton = document.querySelector('.btn-primary');
+
+// -------- Get or create suggestions list --------
+let suggestionsList = document.getElementById('suggestions-list');
+if (!suggestionsList) {
+    suggestionsList = document.createElement('ul');
+    suggestionsList.id = 'suggestions-list';
+    suggestionsList.className = 'suggestions-list';
+    searchInput.parentNode.appendChild(suggestionsList);
+}
+
+// -------- Get or create popup overlay --------
+let popupOverlay = document.getElementById('popup-overlay');
+if (!popupOverlay) {
+    popupOverlay = document.createElement('div');
+    popupOverlay.id = 'popup-overlay';
+    popupOverlay.className = 'popup-overlay';
+    popupOverlay.innerHTML = `
+        <div class="popup-box">
+            <h2>🔍 Tool Not Available</h2>
+            <p>We couldn't find any AI tool matching your search.</p>
+            <button class="popup-close-btn" id="popup-close-btn">OK</button>
+        </div>
+    `;
+    document.body.appendChild(popupOverlay);
+}
+const popupCloseBtn = document.getElementById('popup-close-btn');
 
 // Initialize the page
 function init() {
@@ -148,7 +176,6 @@ function renderTasks() {
         taskCard.classList.add('task-card');
         taskCard.dataset.taskId = task.id;
         
-        // Create visible content
         const visibleContent = document.createElement('div');
         visibleContent.classList.add('task-card-visible');
         visibleContent.innerHTML = `
@@ -156,162 +183,310 @@ function renderTasks() {
             <h3>${task.name}</h3>
         `;
         
-        // Create hover content with tools
         const hoverContent = document.createElement('div');
         hoverContent.classList.add('task-card-hover');
-        
-        // Get tools for this task
         const taskTools = tools[task.id] || [];
         let toolsHtml = '<h4>Popular Tools:</h4><ul>';
-        
-        // Add up to 3 tools in the hover state
         const displayTools = taskTools.slice(0, 3);
         displayTools.forEach(tool => {
             toolsHtml += `<li><a href="${tool.url}" class="tool-link" target="_blank" rel="noopener">${tool.name}</a></li>`;
         });
-        
         toolsHtml += '</ul>';
         hoverContent.innerHTML = toolsHtml;
         
-        // Append both contents
         taskCard.appendChild(visibleContent);
         taskCard.appendChild(hoverContent);
-        
         taskGrid.appendChild(taskCard);
     });
 }
 
-// Render AI tools for a selected task
+// Render tools for a selected task
 function renderToolsForTask(taskId) {
-    // Find the task by ID
     const selectedTask = tasks.find(task => task.id == taskId);
-    
     if (!selectedTask) return;
     
-    // Update the selected task name
     selectedTaskSpan.textContent = selectedTask.name;
-    
-    // Clear previous results
     resultsGrid.innerHTML = '';
-    
-    // Show the results section
     resultsSection.style.display = 'block';
     
-    // Get tools for the selected task
     const taskTools = tools[taskId] || [];
-    
-    // Render each tool
     taskTools.forEach(tool => {
         const toolCard = document.createElement('div');
         toolCard.classList.add('tool-card');
-        
         toolCard.innerHTML = `
             <h3>${tool.name}</h3>
             <p>${tool.description}</p>
             <a href="${tool.url}" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
         `;
-        
         resultsGrid.appendChild(toolCard);
     });
     
-    // If no tools are found
     if (taskTools.length === 0) {
         resultsGrid.innerHTML = '<p>No tools found for this task.</p>';
     }
-    
-    // Scroll to results section
     resultsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Set up event listeners
+// -------- Display full tools for matched tasks --------
+function displayFullToolsForTasks(taskIds, query) {
+    const taskNames = taskIds
+        .map(id => tasks.find(t => t.id == id)?.name)
+        .filter(Boolean)
+        .join(', ');
+
+    selectedTaskSpan.textContent = `Search results for "${query}" (${taskNames})`;
+    resultsGrid.innerHTML = '';
+    resultsSection.style.display = 'block';
+
+    taskIds.forEach((taskId, index) => {
+        const task = tasks.find(t => t.id == taskId);
+        if (!task) return;
+
+        if (taskIds.length > 1) {
+            const header = document.createElement('div');
+            header.style.cssText = `
+                grid-column: 1 / -1;
+                margin-top: ${index === 0 ? '0' : '30px'};
+                margin-bottom: 10px;
+                border-bottom: 2px solid #e0e0e0;
+                padding-bottom: 10px;
+            `;
+            header.innerHTML = `
+                <h2 style="color: #333; font-size: 1.5rem;">
+                    <i class="${task.icon}"></i> ${task.name}
+                </h2>
+            `;
+            resultsGrid.appendChild(header);
+        }
+
+        const taskTools = tools[taskId] || [];
+        taskTools.forEach(tool => {
+            const toolCard = document.createElement('div');
+            toolCard.classList.add('tool-card');
+            toolCard.innerHTML = `
+                <h3>${tool.name}</h3>
+                <p>${tool.description}</p>
+                <a href="${tool.url}" class="btn-secondary" target="_blank" rel="noopener">Visit Tool</a>
+            `;
+            resultsGrid.appendChild(toolCard);
+        });
+    });
+
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// -------- Perform search (triggered by Enter or button click) --------
+function performSearch(query) {
+    if (!query.trim()) return;
+    const q = query.toLowerCase().trim();
+    const matchedTaskIds = new Set();
+
+    tasks.forEach(task => {
+        if (task.name.toLowerCase().includes(q)) {
+            matchedTaskIds.add(task.id);
+        }
+    });
+
+    for (const [taskId, toolList] of Object.entries(tools)) {
+        toolList.forEach(tool => {
+            if (tool.name.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q)) {
+                matchedTaskIds.add(Number(taskId));
+            }
+        });
+    }
+
+    if (matchedTaskIds.size === 0) {
+        showPopup();
+        return;
+    }
+
+    displayFullToolsForTasks(Array.from(matchedTaskIds), q);
+    hideSuggestions();
+}
+
+// -------- Autocomplete logic --------
+let debounceTimer;
+
+function handleSearchInput(e) {
+    const query = e.target.value.trim();
+    clearTimeout(debounceTimer);
+
+    if (query.length === 0) {
+        hideSuggestions();
+        return;
+    }
+
+    debounceTimer = setTimeout(() => {
+        const suggestions = getSuggestions(query);
+        renderSuggestions(suggestions);
+    }, 200);
+}
+
+function getSuggestions(query) {
+    const q = query.toLowerCase();
+    const results = [];
+
+    tasks.forEach(task => {
+        if (task.name.toLowerCase().includes(q)) {
+            results.push({
+                label: task.name,
+                type: 'task',
+                taskId: task.id
+            });
+        }
+    });
+
+    for (const [taskId, toolList] of Object.entries(tools)) {
+        toolList.forEach(tool => {
+            if (tool.name.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q)) {
+                results.push({
+                    label: tool.name,
+                    type: 'tool',
+                    taskId: Number(taskId),
+                    toolName: tool.name
+                });
+            }
+        });
+    }
+
+    const seen = new Set();
+    const unique = results.filter(item => {
+        const key = `${item.type}-${item.label}-${item.taskId}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    return unique.slice(0, 8);
+}
+
+function renderSuggestions(suggestions) {
+    suggestionsList.innerHTML = '';
+    if (suggestions.length === 0) {
+        hideSuggestions();
+        return;
+    }
+
+    suggestions.forEach(suggestion => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${suggestion.label}
+            <span class="suggestion-type">${suggestion.type}</span>
+        `;
+        li.dataset.taskId = suggestion.taskId;
+        li.dataset.type = suggestion.type;
+        li.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            searchInput.value = suggestion.label;
+            hideSuggestions();
+            performSearch(suggestion.label);
+        });
+        suggestionsList.appendChild(li);
+    });
+
+    suggestionsList.style.display = 'block';
+}
+
+function hideSuggestions() {
+    suggestionsList.style.display = 'none';
+    suggestionsList.innerHTML = '';
+}
+
+// -------- Popup functions --------
+function showPopup() {
+    popupOverlay.style.display = 'flex';
+    popupCloseBtn.focus();
+}
+
+function hidePopup() {
+    popupOverlay.style.display = 'none';
+    searchInput.focus();
+}
+
+// -------- Set up event listeners --------
 function setupEventListeners() {
-    // Task card click event with improved handling
+    // Task card click
     taskGrid.addEventListener('click', (e) => {
         const toolLink = e.target.closest('.tool-link');
-        
-        // If a tool link was clicked, don't execute the task card click handler
         if (toolLink) {
-            e.stopPropagation(); // Stop event propagation
-            return; // Exit the function early
+            e.stopPropagation();
+            return;
         }
-        
         const taskCard = e.target.closest('.task-card');
         if (!taskCard) return;
-        
-        // Remove active class from all task cards
-        document.querySelectorAll('.task-card').forEach(card => {
-            card.classList.remove('active');
-        });
-        
-        // Add active class to clicked task card
+        document.querySelectorAll('.task-card').forEach(card => card.classList.remove('active'));
         taskCard.classList.add('active');
-        
-        // Render tools for the selected task
         const taskId = taskCard.dataset.taskId;
         renderToolsForTask(taskId);
+        hideSuggestions();
     });
-    
-    // Add touch events for mobile devices
+
+    // Touch events for tool links
     document.querySelectorAll('.tool-link').forEach(link => {
         link.addEventListener('touchstart', (e) => {
-            // This prevents the task card click from being triggered on touch devices
             e.stopPropagation();
         });
     });
-    
-    // Mobile menu toggle with improved handling
+
+    // Mobile menu
     mobileMenuBtn.addEventListener('click', () => {
         const nav = document.querySelector('.nav');
         nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
     });
-    
-    // Handle responsive design resize
+
     window.addEventListener('resize', () => {
         const nav = document.querySelector('.nav');
-        if (window.innerWidth > 768) { // Typical tablet breakpoint
-            nav.style.display = 'flex'; // Ensure nav is visible on desktop
+        if (window.innerWidth > 768) {
+            nav.style.display = 'flex';
         } else {
-            nav.style.display = 'none'; // Hide on mobile until toggled
+            nav.style.display = 'none';
         }
     });
-    
-    // Search functionality
-    const searchInput = document.querySelector('.search-container input');
-    const searchButton = document.querySelector('.btn-primary');
-    
+
+    // -------- Search input events --------
+    searchInput.addEventListener('input', handleSearchInput);
+
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim().length > 0) {
+            const suggestions = getSuggestions(searchInput.value.trim());
+            renderSuggestions(suggestions);
+        }
+    });
+
+    searchInput.addEventListener('blur', () => {
+        setTimeout(hideSuggestions, 150);
+    });
+
     searchButton.addEventListener('click', () => {
         performSearch(searchInput.value);
+        hideSuggestions();
     });
-    
+
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             performSearch(searchInput.value);
+            hideSuggestions();
+        }
+    });
+
+    // -------- Popup close events --------
+    popupCloseBtn.addEventListener('click', hidePopup);
+
+    popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) {
+            hidePopup();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (popupOverlay.style.display === 'flex') {
+            if (e.key === 'Escape' || e.key === 'Enter') {
+                e.preventDefault();
+                hidePopup();
+            }
         }
     });
 }
 
-// Simple search functionality
-function performSearch(query) {
-    if (!query.trim()) return;
-    
-    query = query.toLowerCase();
-    
-    // Find matching tasks
-    const matchingTasks = tasks.filter(task => 
-        task.name.toLowerCase().includes(query)
-    );
-    
-    // If we found a matching task, simulate clicking on it
-    if (matchingTasks.length > 0) {
-        const taskCard = document.querySelector(`.task-card[data-task-id="${matchingTasks[0].id}"]`);
-        if (taskCard) {
-            taskCard.click();
-        }
-    } else {
-        // No matching tasks found
-        alert('No matching AI tools found. Try a different search term.');
-    }
-}
-
-// Initialize the page when DOM is loaded
+// Initialize
 document.addEventListener('DOMContentLoaded', init);
